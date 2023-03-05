@@ -1,8 +1,8 @@
 from flask import render_template
-
+from flaskr import backend
 
 def make_endpoints(app):
-
+    back = backend.Backend()
     # Flask uses the "app.route" decorator to call methods when users
     # go to a specific route on the project's website.
     @app.route("/")
@@ -15,7 +15,9 @@ def make_endpoints(app):
     
     @app.route("/about")
     def about():
-        return render_template("about.html")
+        content = back.get_wiki_page("about")
+        back.get_all_page_names()
+        return render_template("about.html", content=content)
     
     @app.route("/pages")
     def pages():
