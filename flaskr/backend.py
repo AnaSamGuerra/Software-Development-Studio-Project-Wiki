@@ -13,19 +13,31 @@ class Backend:
         self.pages_bucket = self.storage_client.bucket(self.pages_bucket_name)
         
     def get_wiki_page(self, name):
+        #Pages that will not be on the 'Pages' folder from the GCS Bucket
+        outside = {'home','about'}
         #Name of the text file to be access
         self.blob_name = name + ".txt"
-        self.blob = self.pages_bucket.blob(self.blob_name)
+
+        if name not in outside:
+            self.blob = self.pages_bucket.blob("Pages/"  + self.blob_name)
+        else:
+            self.blob = self.pages_bucket.blob(self.blob_name)
+
         with self.blob.open("r") as f:
             self.content = f.read()
 
         return self.content
 
     def get_all_page_names(self):
+        #Returns a list with the names of all pages
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
+        files = []
         # Note: The call returns a response only when the iterator is consumed.
         for blob in blobs:
-            print(blob.name)
+            if blob.name.startswith("P"):
+                files.append(blob.name[6:-4])
+
+        return files[1:]
 
     def upload(self):
         pass
