@@ -19,9 +19,9 @@ def make_endpoints(app):
     def about():
         content = back.get_wiki_page("about")
         img1 = back.get_image("india.jpg")
-        img2 = back.get_image("samanyha.jpg")
+        img2 = back.get_image("samantha.jpg")
         img3 = back.get_image("orlando.jpg")
-        return render_template("about.html", content=content)
+        return render_template("about.html", content=content, img1=img1, img2=img2, img3=img3)
 
     @app.route("/pages/")
     @app.route("/pages/<subpage>")
