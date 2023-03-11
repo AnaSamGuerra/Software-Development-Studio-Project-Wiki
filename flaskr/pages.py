@@ -1,5 +1,7 @@
 from flask import render_template
 from flaskr import backend
+from flask import Flask, flash, request, redirect, url_for
+
 
 def make_endpoints(app):
     back = backend.Backend()
@@ -35,6 +37,9 @@ def make_endpoints(app):
     def logout():
         return render_template("logout.html")
 
-    @app.route("/upload")
+    @app.route("/upload" , methods = ['GET',"POST"])
     def upload():
+        if request.method == "POST":
+            file = request.form.get("file")
+            back.upload(file)
         return render_template("upload.html")    
