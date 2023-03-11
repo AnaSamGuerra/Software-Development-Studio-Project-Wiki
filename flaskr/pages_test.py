@@ -38,4 +38,4 @@ def test_upload(client):
 def test_pages(client):
     resp = client.get("/pages")
     assert resp.status_code == 200
-    assert b"<h1>pages contained in this wiki/h1>" in resp.data
+    assert b"<h3>Pages contained in this Wiki</h3>" in resp.data
