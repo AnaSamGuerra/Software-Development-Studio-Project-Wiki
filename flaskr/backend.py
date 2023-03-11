@@ -77,5 +77,9 @@ class Backend:
     def sign_in(self):
         pass
 
-    def get_image(self):
-        pass
+    def get_image(self,imagename):
+        self.image = self.pages_bucket.blob("Authors/" + imagename)
+        with open(self.image,"r") as i:
+            self.image_to_display = i.read()
+        return self.image_to_display
+    
