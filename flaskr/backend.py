@@ -3,6 +3,7 @@ import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
+
 # TODO(Project 1): Implement Backend according to the requirements.
 #Upload usage 
 app = Flask(__name__)
@@ -78,8 +79,7 @@ class Backend:
         pass
 
     def get_image(self,imagename):
-        self.image = self.pages_bucket.blob("Authors/" + imagename)
-        with open(self.image,"r") as i:
-            self.image_to_display = i.read()
-        return self.image_to_display
+        img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
+        return img
+        
     
