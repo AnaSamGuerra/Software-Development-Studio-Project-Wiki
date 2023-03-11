@@ -18,6 +18,9 @@ def make_endpoints(app):
     @app.route("/about")
     def about():
         content = back.get_wiki_page("about")
+        img1 = back.get_image("india.jpg")
+        img2 = back.get_image("samanyha.jpg")
+        img3 = back.get_image("orlando.jpg")
         return render_template("about.html", content=content)
 
     @app.route("/pages/")
