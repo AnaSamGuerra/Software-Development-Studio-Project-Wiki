@@ -1,8 +1,14 @@
+{% extends "main.html" %}
 
-<!doctype html>
+{% block page_name %}
+Upload
+{% endblock %}
+
+{% block content %}
 <title>Upload new File</title>
 <h1>Upload doc to the wiki</h1>
 <form action ="{{url_for('upload')}}" method="post" enctype=multipart/form-data>
   <input type="file" name="file">
   <input type=submit value=Upload>
 </form>
+{% endblock %}

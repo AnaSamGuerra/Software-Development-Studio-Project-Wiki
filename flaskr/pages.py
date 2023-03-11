@@ -18,12 +18,18 @@ def make_endpoints(app):
     @app.route("/about")
     def about():
         content = back.get_wiki_page("about")
-        back.get_all_page_names()
         return render_template("about.html", content=content)
-    
-    @app.route("/pages")
-    def pages():
-        return render_template("pages.html")
+
+    @app.route("/pages/")
+    @app.route("/pages/<subpage>")
+    def pages(subpage=None):
+        if subpage == None:
+            files = back.get_all_page_names()
+            return render_template("pages.html", content=files)
+
+        else:
+            content = back.get_wiki_page(subpage)
+            return render_template("content.html", content=content, page_name=subpage)
 
     @app.route("/signup")
     def signup():
