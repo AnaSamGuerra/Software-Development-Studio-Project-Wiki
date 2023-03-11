@@ -17,12 +17,7 @@ def make_endpoints(app):
     @app.route("/about")
     def about():
         content = back.get_wiki_page("about")
-        return render_template("about.html", content=content, page_name="Bo")
-   
-    # @app.route("/pages/<subpath>")
-    # def pages(subpath):
-    #     content = back.get_wiki_page("Pages/"+subpath)
-    #     return render_template("about.html", content=content)
+        return render_template("about.html", content=content)
 
     @app.route("/pages/")
     @app.route("/pages/<subpage>")
