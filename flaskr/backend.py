@@ -11,6 +11,10 @@ from csv import writer
 app = Flask(__name__)
 
 class Backend:
+    
+    """ The backend process all infomation taken from and returning it to pages.py for the information to be proccessed
+    or displayes later trhough a html template and in some cases adding files to the buckets or retiving to from the buckets
+    """
 
     def __init__(self):
         #The ID of  GCS bucket with users info
@@ -22,10 +26,11 @@ class Backend:
         # Creates the new bucket
         self.pages_bucket = self.storage_client.bucket(self.pages_bucket_name)
         
-        #upload
+        #upload buckets and blobs 
         self.bucket = self.storage_client.bucket("project1_wiki_content")
         self.blobs = list(self.bucket.list_blobs())
 
+    """gets the content of a specific wiki page"""
     def get_wiki_page(self, name):
         #Pages that will not be on the 'Pages' folder from the GCS Bucket
         outside = {'home','about'}
@@ -42,6 +47,7 @@ class Backend:
 
         return self.content
 
+    """Gets all the page names into a list to be later displayed through pages.py"""
     def get_all_page_names(self):
         #Returns a list with the names of all pages
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
@@ -53,7 +59,7 @@ class Backend:
 
         return files[1:]
 
-
+    """Check if file is allowed and uploads it to upload folder """
     def upload(self,file):
         ALLOWED_EXTENSIONS = {'txt','png', 'jpg'}
         def allowed_file(filename):
@@ -134,6 +140,7 @@ class Backend:
         return False
         
 
+    """gets images from the bucket folder""" 
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
