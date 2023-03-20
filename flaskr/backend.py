@@ -2,7 +2,9 @@ from google.cloud import storage
 import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
-
+#hasing library
+import bcrypt
+from csv import writer
 
 # TODO(Project 1): Implement Backend according to the requirements.
 #Upload usage 
@@ -72,11 +74,65 @@ class Backend:
             upload_blob.upload_from_file(file)
         return 
 
-    def sign_up(self):
-        pass
+    def sign_up(self, username, password):
+        
+        #getting the prefix to hash and salt
+        preFix = bcrypt.gensalt()
 
-    def sign_in(self):
-        pass
+        #hashed password
+        hashedPassword = bcrypt.hashpw(password, preFix)
+
+        #hashed username
+        hashedUsername = bcrypt.hashpw(username, preFix)
+
+        client = storage.Client()
+        
+        bucket = client.bucket("users_bucket_name")
+
+        #initializing file name
+        fileofUser = f"(hashedUsername).txt"
+
+        #creating user's file
+        blob = bucket.blob(fileofUser)
+        
+        #writing password into user's file to store it 
+        if hashedUsername not in self.users_bucket_name:
+            #opening user file to write in password
+            with open(blob,'a') as userFile:
+                writer_object = writer(userFile)
+                #writing hashed password into the user's row
+                writer_object.writerow(hashedPassword)
+ 
+                # Close the file object
+                userFile.close()
+                
+            return True
+
+        else:
+            return False
+
+
+    def sign_in(self, username, password):
+
+        client = storage.Client()
+        bucket = client.bucket("users_bucket_name")
+        blob = bucket.blob(username)
+
+        
+
+        try:
+            with blob.open('r') as username:
+                hashedData = username.read()
+
+        except:
+            return "User Doesn't exist"
+
+        #if user Data found it exist
+        if hashedData == username:
+            return True
+
+        return False
+        
 
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
