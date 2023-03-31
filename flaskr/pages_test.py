@@ -4,7 +4,7 @@ import pytest
 
 # See https://flask.palletsprojects.com/en/2.2.x/testing/ 
 # for more info on testing
-"""
+
 @pytest.fixture
 def app():
     app = create_app({
@@ -35,7 +35,7 @@ def test_upload(client):
     resp = client.get("/upload")
     assert resp.status_code == 200
     assert b"<h1>Upload doc to the wiki</h1>" in resp.data
-
+"""
 def test_pages(client):
     resp = client.get("/pages")
     assert resp.status_code == 200
