@@ -10,12 +10,13 @@ from csv import writer
 #Upload usage 
 app = Flask(__name__)
 
+# -> Add cloud as a dependency when creating backend class
 class Backend:
     
     """ The backend process all infomation taken from and returning it to pages.py for the information to be proccessed
     or displayes later trhough a html template and in some cases adding files to the buckets or retiving to from the buckets
     """
-
+        #-> Add bucket_provider as dependency 
     def __init__(self):
         #The ID of  GCS bucket with users info
         self.users_bucket_name = "users_passwords_project1"

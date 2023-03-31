@@ -1,7 +1,7 @@
 from flask import render_template
 from flaskr import backend
 from flask import Flask, flash, request, redirect, url_for
-
+#-> IMPORT CLOUD STORAGE Too
 
 def make_endpoints(app):
     back = backend.Backend()
