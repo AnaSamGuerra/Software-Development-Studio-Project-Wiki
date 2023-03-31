@@ -17,19 +17,21 @@ class Backend:
     or displayes later trhough a html template and in some cases adding files to the buckets or retiving to from the buckets
     """
         #-> Add bucket_provider as dependency 
-    def __init__(self):
+    def __init__(self,storage_client = storage.Client()):
         #The ID of  GCS bucket with users info
         self.users_bucket_name = "users_passwords_project1"
         # The ID of GCS bucket with pages
         self.pages_bucket_name = "project1_wiki_content"
         # Instantiates a client
-        self.storage_client = storage.Client()
+        self.storage_client = storage_client
+        print("HELLO??")
+        print(self.storage_client)
         # Creates the new bucket
         self.pages_bucket = self.storage_client.bucket(self.pages_bucket_name)
         
         #upload buckets and blobs 
         self.bucket = self.storage_client.bucket("project1_wiki_content")
-        self.blobs = list(self.bucket.list_blobs())
+        
 
     """gets the content of a specific wiki page"""
     def get_wiki_page(self, name):
@@ -73,6 +75,7 @@ class Backend:
             flash('No selected file')
             return redirect(request.url)
         #checking for file already uploded 
+        self.blobs = list(self.bucket.list_blobs())
         if file.filename in self.blobs:
             flash('file alredy in folder')
             return redirect(request.url)
