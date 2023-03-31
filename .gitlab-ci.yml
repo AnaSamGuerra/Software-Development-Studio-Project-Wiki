@@ -6,7 +6,6 @@ lint:
     - yapf --style google --recursive .
   only:
     - merge_requests
-
 unittest:
   stage: test
   script:
