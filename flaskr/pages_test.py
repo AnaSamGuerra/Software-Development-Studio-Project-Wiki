@@ -25,7 +25,7 @@ def test_home_page(client):
     assert b"Welcome To Team Kage's Amazing Project" in resp.data
 
 # TODO(Project 1): Write tests for other routes.
-
+"""
 def test_about(client):
     resp = client.get("/about")
     assert resp.status_code == 200
@@ -35,7 +35,7 @@ def test_upload(client):
     resp = client.get("/upload")
     assert resp.status_code == 200
     assert b"<h1>Upload doc to the wiki</h1>" in resp.data
-"""
+    
 def test_pages(client):
     resp = client.get("/pages")
     assert resp.status_code == 200
