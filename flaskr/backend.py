@@ -24,15 +24,9 @@ class Backend:
         self.pages_bucket_name = "project1_wiki_content"
         # Instantiates a client
         self.storage_client = storage_client
-        print("HELLO??")
-        print(self.storage_client)
         # Creates the new bucket
         self.pages_bucket = self.storage_client.bucket(self.pages_bucket_name)
         
-        #upload buckets and blobs 
-        self.bucket = self.storage_client.bucket("project1_wiki_content")
-        
-
     """gets the content of a specific wiki page"""
     def get_wiki_page(self, name):
         #Pages that will not be on the 'Pages' folder from the GCS Bucket
@@ -79,6 +73,7 @@ class Backend:
         if file.filename in self.blobs:
             flash('file alredy in folder')
             return redirect(request.url)
+        self.bucket = self.storage_client.bucket("project1_wiki_content")
         if file and allowed_file(file.filename):
             upload_blob = self.pages_bucket.blob("Pages/" + file.filename)
             upload_blob.upload_from_file(file)
