@@ -1,0 +1,20 @@
+{% extends "main.html" %}
+
+{% block page_name %}
+Search results for "{{page_name}}" - Wiki 
+{% endblock %}
+
+{% block content %}
+<h3>Search results</h3>
+
+<ul>
+    {% if not content %}
+        There were no results matching the query.
+    {% endif %}
+
+    {% for file in content %}
+        <li><a href="pages/{{file}}">{{file}}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -57,4 +57,12 @@ def make_endpoints(app):
         if request.method == "POST":
             file = request.form.get("file")
             back.upload(file)
-        return render_template("upload.html")    
+        return render_template("upload.html")
+
+    @app.route("/search", methods = ['GET', 'POST'])    
+    def search():
+        if request.method == "POST":
+            query = request.form.get("query")
+            files = back.get_search_results(query)
+        
+        return render_template("results.html", content=files, page_name = query)
