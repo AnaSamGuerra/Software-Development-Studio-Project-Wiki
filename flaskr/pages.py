@@ -38,14 +38,41 @@ def make_endpoints(app):
             return render_template("content.html", content=content, page_name=subpage)
     
     """Goes to sign up page"""
-    @app.route("/signup")
+    @app.route("/signup", methods = ['POST', 'GET'])
     def signup():
+        
+        if request.method == 'POST':
+            
+            #gets the password and username
+            username = request.form.get('username')
+            password = request.form.get('password')
+        
+            
+            # do things with the form data
+            
+            return_value_of_sign_up = back.sign_up(username, password) # after getting username and password from the form
+
+        #render a different page with the persisted login information 
         return render_template("signup.html")
 
     """Goes to login page"""
-    @app.route("/login")
+    @app.route("/login", methods = ['POST', 'GET'])
     def login():
-        return render_template("login.html")
+   
+        if request.method == 'POST':
+
+            #gets the password and username
+            username = request.form.get('username')
+            password = request.form.get('password')
+        
+            # do things with the form data
+            # render a different page with the persisted login information
+            return_value_of_sign_in = back.sign_in(username, password) # after getting username and password from the form
+            
+            # depending on return_value_of_sign_in do something
+        else:
+            return render_template("login.html")
+        
 
     @app.route("/logout")
     def logout():
@@ -54,7 +81,9 @@ def make_endpoints(app):
     """Goes to upload page, receives an input file and then calls the upload method with said input file"""
     @app.route("/upload" , methods = ['GET',"POST"])
     def upload():
+
         if request.method == "POST":
             file = request.form.get("file")
             back.upload(file)
+
         return render_template("upload.html")    

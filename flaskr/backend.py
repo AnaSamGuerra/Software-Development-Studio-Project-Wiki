@@ -1,9 +1,9 @@
 from google.cloud import storage
 import os
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, session, render_template
 from werkzeug.utils import secure_filename
 #hasing library
-import bcrypt
+from cryptography.fernet import Fernet
 from csv import writer
 
 # TODO(Project 1): Implement Backend according to the requirements.
@@ -22,11 +22,31 @@ class Backend:
         self.users_bucket_name = "users_passwords_project1"
         # The ID of GCS bucket with pages
         self.pages_bucket_name = "project1_wiki_content"
+
         # Instantiates a client
         self.storage_client = storage_client
         # Creates the new bucket
         self.pages_bucket = self.storage_client.bucket(self.pages_bucket_name)
         
+
+        #bucket created for user passwords
+        self.user_files = self.storage_client.bucket(self.users_bucket_name)
+    
+        #upload buckets and blobs 
+        self.bucket = self.storage_client.bucket("project1_wiki_content")
+        self.blobs = list(self.bucket.list_blobs())
+
+        #creating key for hashing
+        key = Fernet.generate_key()
+        self.generatedKey = Fernet(key)
+
+    #for creating the session id
+    app = Flask(__name__)
+    app.config["SESSION_PERMANENT"] = False
+    app.config["SESSION_TYPE"] = "filesystem"
+    session(app)
+
+
     """gets the content of a specific wiki page"""
     def get_wiki_page(self, name):
         #Pages that will not be on the 'Pages' folder from the GCS Bucket
@@ -61,85 +81,95 @@ class Backend:
         ALLOWED_EXTENSIONS = {'txt','png', 'jpg'}
         def allowed_file(filename):
             return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
+
         file = request.files['file']
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
+
         #checking for file already uploded 
         self.blobs = list(self.bucket.list_blobs())
+
         if file.filename in self.blobs:
             flash('file alredy in folder')
             return redirect(request.url)
         self.bucket = self.storage_client.bucket("project1_wiki_content")
+
+
+        if file.filename in self.blobs:
+            flash('file alredy in folder')
+            return redirect(request.url)
+
         if file and allowed_file(file.filename):
             upload_blob = self.pages_bucket.blob("Pages/" + file.filename)
             upload_blob.upload_from_file(file)
         return 
 
+  
+
     def sign_up(self, username, password):
-        
-        #getting the prefix to hash and salt
-        preFix = bcrypt.gensalt()
+   #remeber to get the username and password from pages self note
 
         #hashed password
-        hashedPassword = bcrypt.hashpw(password, preFix)
-
-        #hashed username
-        hashedUsername = bcrypt.hashpw(username, preFix)
-
-        client = storage.Client()
+        hashedPassword = self.generatedKey.encrypt(password)
         
-        bucket = client.bucket("users_bucket_name")
+        #getting the bucket of the user's files 
+        bucket_users = self.user_files
 
-        #initializing file name
-        fileofUser = f"(hashedUsername).txt"
+        #making a name that we will define the file with this name 
+        fileofUser = f"{username}.txt"
 
-        #creating user's file
-        blob = bucket.blob(fileofUser)
+            
+        #users data stores into the blob that will be stored into the bucket
+        blob_users = bucket_users.blob(fileofUser)
+
+        #opening user file to write in password
+        with blob_users.open("w") as file:
+
+            #accessing bucket with user's passwords in it
+            file.write(hashedPassword)
         
-        #writing password into user's file to store it 
-        if hashedUsername not in self.users_bucket_name:
-            #opening user file to write in password
-            with open(blob,'a') as userFile:
-                writer_object = writer(userFile)
-                #writing hashed password into the user's row
-                writer_object.writerow(hashedPassword)
- 
-                # Close the file object
-                userFile.close()
+        return True
+
+        
+
+#putting in fernet to pass in the key that we encrypted the password with
+    def sign_in(self, username, password,):
+        
                 
-            return True
+        bucket = self.user_files
+        blob = list(self.bucket.list_blobs())
 
-        else:
-            return False
+        for user in blob:
+            #removing the .txt from part from the string and storing it in a variable for comparison
+            fileWithoutTxt = user[:-4]
 
+            #identifying if the username exist
+            if username == fileWithoutTxt:
+            #opens the user's file
+                with user.open('r') as file:
+                #checks for the password
 
-    def sign_in(self, username, password):
+                    for row in file:
+                        #checking if the password entered is the same as the one entered 
+                        if self.generatedKey.decrypt(row) == password:
 
-        client = storage.Client()
-        bucket = client.bucket("users_bucket_name")
-        blob = bucket.blob(username)
+                        
+                            #session is created for the user 
+                            session[username] = request.form.get("username")
 
+                            #sends the user to content page after login credentials are valid
+                            return redirect('/content')
         
+        #nothing was found so it renders the login page 
+        return redirect('/login')
 
-        try:
-            with blob.open('r') as username:
-                hashedData = username.read()
 
-        except:
-            return "User Doesn't exist"
-
-        #if user Data found it exist
-        if hashedData == username:
-            return True
-
-        return False
-        
-
-    """gets images from the bucket folder""" 
+    #gets images from the bucket folder
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
