@@ -148,7 +148,6 @@ class Backend:
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
-<<<<<<< flaskr/backend.py
     """Gets search results, takes a query and returns matching"""
     def get_search_results(self, query):
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
@@ -178,4 +177,3 @@ class Backend:
                 files.append("https://storage.cloud.google.com/project1_wiki_content/Uploaded/" + blob.name[PREFFIX_REMOVE:])
 
         return files[1:]
->>>>>>> flaskr/backend.py
