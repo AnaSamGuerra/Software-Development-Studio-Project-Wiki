@@ -1,1 +1,9 @@
 {% extends "main.html" %}
+{% block content %}
+<body>
+    <h1>Log Out</h1>
+    <form action ="{{url_for('main')}}" method="get">
+      <button type="submit" value="Submit">logout</button>
+    </form>
+</body>
+{% endblock %}

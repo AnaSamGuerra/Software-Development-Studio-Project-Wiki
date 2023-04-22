@@ -35,20 +35,26 @@ def make_endpoints(app):
 
         else:
             content = back.get_wiki_page(subpage)
-            return render_template("content.html", content=content, page_name=subpage)
+            #get charcarter image
+            charimg = back.get_imageChar(subpage+ ".png")
+            return render_template("content.html", content=content, page_name=subpage,charimg=charimg)
     
     """Goes to sign up page"""
-    @app.route("/signup")
+    @app.route("/signup", methods = ["GET"])
     def signup():
         return render_template("signup.html")
 
     """Goes to login page"""
-    @app.route("/login")
+    @app.route("/login", methods = ["GET"])
     def login():
+        if request.method == "GET":
+            back.sign_in("samUser")
         return render_template("login.html")
 
-    @app.route("/logout")
+    @app.route("/logout", methods = ["GET"])
     def logout():
+        if request.method == "GET":
+            back.sign_in("NON EXITEN USER POSSIBLE HERE")
         return render_template("logout.html")
 
     """Goes to upload page, receives an input file and then calls the upload method with said input file"""
@@ -57,4 +63,6 @@ def make_endpoints(app):
         if request.method == "POST":
             file = request.form.get("file")
             back.upload(file)
-        return render_template("upload.html")    
+            if request.form.get("actionbutton"):
+                back.delete_user_img()   
+        return render_template("upload.html",username=back.getUserName())    
