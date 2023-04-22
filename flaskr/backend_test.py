@@ -4,8 +4,21 @@ import pytest
 from unittest.mock import patch, mock_open
 from unittest.mock import MagicMock
 from flask import Flask, flash, request, redirect, url_for
+
+from unittest.mock import MagicMock
 #from flaskr.pages.py import make_endpoints
 # TODO(Project 1): Write tests for Backend methods.
+
+def mockBackend():
+    storage_client_mock = MagicMock()
+    back = backend.Backend(storage_client_mock)
+
+
+
+
+
+
+
 
 
 

@@ -1,34 +1,10 @@
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-</head>
+{% extends "main.html" %}
+{% block content %}
 <body>
-  <center>
-  <h3>Register Here</h3>
-  <form action="" method="post">
-      <table>
-        <tr>
-          <td>Username:</td>
-          <td><input type="text" name="user" placeholder="Enter name Here"></td>
-        </tr>
-        <tr>
-          <td>Password:</td>
-          <td><input type="password" name="user_pass" placeholder="Enter Password Here"></td>
-        </tr>
-        <tr>
-          <td>Email:</td>
-          <td><input type="email" name="mail" placeholder="Enter Email Here"></td>
-        </tr>
-        <tr>
-           <td><input type="submit" name="submit" value="submit"></td>
-           <td><p>Already a user? <a href="login.php">Login Here</a></p></td>
-        </tr>
-      </table>
-  </form>
-  
-  </center>
+    <h1>Sign Up</h1>
+    <p>Click the button to sign in with example user.</p>   
+    <form action ="{{url_for('login')}}" method="get">
+      <button type="submit" value="Submit">sign up with example user</button>
+    </form>
 </body>
-</html>
+{% endblock %}
