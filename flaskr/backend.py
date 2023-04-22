@@ -92,6 +92,7 @@ class Backend:
                 self.track_imguser_Uploads(self.getUserName(),file.filename)
                 upload_blob = self.pages_bucket.blob("Uploaded/" + file.filename)
                 print(upload_blob,"<--- THIS IS THE UPLODED BLOB DAHDKJAHKDJHAS\n")
+                upload_blob = self.pages_bucket.blob("Uploaded/" + file.filename)
                 upload_blob.upload_from_file(file)
         return 
     # https://stackoverflow.com/questions/10555080/delete-files-from-google-cloud-storage
@@ -135,12 +136,20 @@ class Backend:
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
-    
+
     """gets images for character's pages""" 
     def get_imageChar(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Uploaded/" + imagename
         return img
 
+    def get_uploaded(self):
+        PREFFIX_REMOVE = 9
+        blobs = self.storage_client.list_blobs(self.pages_bucket_name)
+        files = []
+        # Note: The call returns a response only when the iterator is consumed.
+        for blob in blobs:
+            if blob.name.startswith("U"):
+                files.append("https://storage.cloud.google.com/project1_wiki_content/Uploaded/" + blob.name[PREFFIX_REMOVE:])
 
- 
-    
+        return files[1:]
+

@@ -16,4 +16,10 @@ Upload
         <input type="submit" value="Delete user pictures" name="actionbutton"/>
     </form>
 </form>
+<div>
+    <h2>Users Gallery</h2>
+    {% for image in content %}
+        <img src={{image}} width="400px" height="300px"></img>
+    {% endfor %}
+</div>
 {% endblock %}
