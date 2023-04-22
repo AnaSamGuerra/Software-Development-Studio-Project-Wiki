@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+<link rel="stylesheet" href="/static/icons.css" />
 <head>
     <head>
         <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
@@ -23,6 +23,15 @@
     <div>       
         <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
         {% block content %} Welcome To Team Kage's Amazing Project {% endblock %}
+        <form method="post" action ="{{url_for('home')}}">
+            <h3>Links: Welcome here are the links to Watch and read</h3>
+            <p>
+                <a href="https://www.funimation.com/shows/assassination-classroom/?qid=None"> Funimation  </a>
+            <p>
+                <a href="https://www.crunchyroll.com/series/GRE59JGX6/assassination-classroom"> Crunchyroll</a>
+            <p>
+                <a href="https://www.viz.com/assassination-classroom"> Manga Viz Media</a>
+            <p>
     </div>
 </body>
 </html>

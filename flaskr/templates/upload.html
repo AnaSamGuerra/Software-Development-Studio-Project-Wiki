@@ -7,7 +7,7 @@ Upload
 {% block content %}
 <title>Upload new File</title>
 <h1>Upload doc to the wiki</h1>
-<h4>{{username}} thi is the user<h4>
+<h4>current user: {{username}} <h4>
 <form action ="{{url_for('upload')}}" method="post" enctype=multipart/form-data>
   <input type="file" name="file">
   <input type=submit value=Upload>
