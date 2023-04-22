@@ -70,7 +70,7 @@ class Backend:
             flash('No selected file')
             return redirect(request.url)
         #checking for file already uploded 
-        self.blobs = list(self.bucket.list_blobs())
+        self.blobs = list(self.pages_bucket.list_blobs())
         if file.filename in self.blobs:
             flash('file alredy in folder')
             return redirect(request.url)
@@ -145,12 +145,14 @@ class Backend:
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
 
-    
+    """Gets search results, takes a query and returns matching"""
     def get_search_results(self, query):
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
         possible_results = defaultdict(int)
         files = []
         query = query.lower()
+        PREFFIX_REMOVE = 6
+        SUFFIX_REMOVE = -4
         for blob in blobs:
             if blob.name.startswith("P"):
                 file_name = blob.name[6:-4].lower()
@@ -158,6 +160,6 @@ class Backend:
                     if i < len(query) and query[i] == file_name[i]:
                         possible_results[file_name] += 1
                 if possible_results[file_name] > (len(query) // 2):
-                    files.append(blob.name[6:-4])
+                    files.append(blob.name[PREFFIX_REMOVE:SUFFIX_REMOVE])
 
         return files
