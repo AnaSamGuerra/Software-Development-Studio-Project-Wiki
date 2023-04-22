@@ -158,7 +158,7 @@ class Backend:
                     files.append(blob.name[PREFFIX_REMOVE:SUFFIX_REMOVE])
 
         return files
-        
+    """Gets uploaded files"""  
     def get_uploaded(self):
         PREFFIX_REMOVE = 9
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
