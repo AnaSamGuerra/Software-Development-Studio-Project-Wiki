@@ -76,8 +76,12 @@ class Backend:
             return redirect(request.url)
         self.bucket = self.storage_client.bucket("project1_wiki_content")
         if file and allowed_file(file.filename):
-            upload_blob = self.pages_bucket.blob("Pages/" + file.filename)
-            upload_blob.upload_from_file(file)
+            if file.filename[-3:] == 'txt':
+                upload_blob = self.pages_bucket.blob("Pages/" + file.filename)
+                upload_blob.upload_from_file(file)
+            else:
+                upload_blob = self.pages_bucket.blob("Uploaded/" + file.filename)
+                upload_blob.upload_from_file(file)
         return 
 
     def sign_up(self, username, password):
@@ -144,7 +148,7 @@ class Backend:
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
-
+<<<<<<< flaskr/backend.py
     """Gets search results, takes a query and returns matching"""
     def get_search_results(self, query):
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
@@ -163,3 +167,15 @@ class Backend:
                     files.append(blob.name[PREFFIX_REMOVE:SUFFIX_REMOVE])
 
         return files
+        
+    def get_uploaded(self):
+        PREFFIX_REMOVE = 9
+        blobs = self.storage_client.list_blobs(self.pages_bucket_name)
+        files = []
+        # Note: The call returns a response only when the iterator is consumed.
+        for blob in blobs:
+            if blob.name.startswith("U"):
+                files.append("https://storage.cloud.google.com/project1_wiki_content/Uploaded/" + blob.name[PREFFIX_REMOVE:])
+
+        return files[1:]
+>>>>>>> flaskr/backend.py
