@@ -32,7 +32,6 @@ def make_endpoints(app):
         if subpage == None:
             files = back.get_all_page_names()
             return render_template("pages.html", content=files)
-
         else:
             content = back.get_wiki_page(subpage)
             #get charcarter image
@@ -64,6 +63,7 @@ def make_endpoints(app):
         if request.method == "POST":
             file = request.form.get("file")
             back.upload(file)
+            #If 
             if request.form.get("actionbutton"):
                 back.delete_user_img()   
         return render_template("upload.html",username=back.getUserName())    

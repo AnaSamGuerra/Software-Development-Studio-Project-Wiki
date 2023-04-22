@@ -29,7 +29,6 @@ class Backend:
         self.pages_bucket = self.storage_client.bucket(self.pages_bucket_name)
         # adding username bucket
         self.usernames_bucket = self.storage_client.bucket(self.users_bucket_name)
-
         #sing in should be false when loading the page for the first time
         self.logedin = False
         self.username = ""
@@ -92,26 +91,23 @@ class Backend:
                 #all uploded pictures are under the uploded folder to be displayed
                 self.track_imguser_Uploads(self.getUserName(),file.filename)
                 upload_blob = self.pages_bucket.blob("Uploaded/" + file.filename)
-                print(upload_blob,"<--- THIS IS THE UPLODED BLOB DAHDKJAHKDJHAS\n")
-                upload_blob = self.pages_bucket.blob("Uploaded/" + file.filename)
                 upload_blob.upload_from_file(file)
         return 
-    # https://stackoverflow.com/questions/10555080/delete-files-from-google-cloud-storage
+
+    # for reference in deletigin blobshttps://stackoverflow.com/questions/10555080/delete-files-from-google-cloud-storage
+    """Deleats all of an specific user uploded images"""
     def delete_user_img(self):
-        print("HELLO WORKING????????????????\n",self.getUserName()," <----USERNMAE????")
         blob = self.usernames_bucket.blob(self.getUserName() +".txt")
         with blob.open('r') as f:
             content = f.readlines()
-        print(content, "CONTENT\n ")
         for line in range(1,len(content)):
-            print(content[line].strip()," <----LINE PRINTINGGG        HIDHIODHS")
             blob = self.pages_bucket.blob("Uploaded/" + content[line].strip())
-            print(blob == "https://storage.cloud.google.com/project1_wiki_content/Uploaded/testDeletescreenshot.png")
             blob.delete()
         blob = self.usernames_bucket.blob(self.getUserName() +".txt")
         with blob.open('w') as f:
             f.write(content[0])
         return
+
     '''no used at the moment'''
     def sign_up(self, username, password):
         pass
