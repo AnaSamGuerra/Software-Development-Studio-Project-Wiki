@@ -1,6 +1,7 @@
 from flask import render_template
 from flaskr import backend
 from flask import Flask, flash, request, redirect, url_for
+from flaskr import WebScraper
 #-> IMPORT CLOUD STORAGE Too
 
 def make_endpoints(app):
@@ -86,4 +87,11 @@ def make_endpoints(app):
             file = request.form.get("file")
             back.upload(file)
 
-        return render_template("upload.html")    
+        return render_template("upload.html")  
+
+    @app.route("/collectables", )
+    def colletables():
+        
+        weapon = WebScraper.weapon_scraper()
+        website = weapon.compare()
+        return redirect(website)

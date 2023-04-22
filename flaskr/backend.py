@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 #hasing library
 from cryptography.fernet import Fernet
 from csv import writer
+import csv
 
 # TODO(Project 1): Implement Backend according to the requirements.
 #Upload usage 
@@ -44,7 +45,7 @@ class Backend:
     app = Flask(__name__)
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
-    session(app)
+    #Session(app)
 
 
     """gets the content of a specific wiki page"""
@@ -114,8 +115,11 @@ class Backend:
     def sign_up(self, username, password):
    #remeber to get the username and password from pages self note
 
-        #hashed password
-        hashedPassword = self.generatedKey.encrypt(password)
+        #casting the password into a string because it's not for some reason when sent through the function
+        password = str(password)
+
+        #hashed password, and turning it into bytes
+        hashedPassword = self.generatedKey.encrypt(bytes(password, 'utf-8'))
         
         #getting the bucket of the user's files 
         bucket_users = self.user_files
@@ -131,9 +135,10 @@ class Backend:
         with blob_users.open("w") as file:
 
             #accessing bucket with user's passwords in it
-            file.write(hashedPassword)
+            csv.writer(file).writerow(hashedPassword)
         
-        return True
+        
+        return redirect('/about')
 
         
 
@@ -156,7 +161,8 @@ class Backend:
 
                     for row in file:
                         #checking if the password entered is the same as the one entered 
-                        if self.generatedKey.decrypt(row) == password:
+                        #turning
+                        if self.generatedKey.decrypt(row.decode('utf-8')) == password:
 
                         
                             #session is created for the user 
