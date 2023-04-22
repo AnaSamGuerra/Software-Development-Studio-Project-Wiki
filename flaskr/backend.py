@@ -147,13 +147,13 @@ class Backend:
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
-   
     def get_uploaded(self):
+        PREFFIX_REMOVE = 9
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
         files = []
         # Note: The call returns a response only when the iterator is consumed.
         for blob in blobs:
             if blob.name.startswith("U"):
-                files.append("https://storage.cloud.google.com/project1_wiki_content/Uploaded/" + blob.name[9:])
+                files.append("https://storage.cloud.google.com/project1_wiki_content/Uploaded/" + blob.name[PREFFIX_REMOVE:])
 
         return files[1:]
