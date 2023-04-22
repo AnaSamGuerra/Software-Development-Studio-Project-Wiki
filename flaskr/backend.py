@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 #hasing library
 import bcrypt
 from csv import writer
+from collections import defaultdict
 
 # TODO(Project 1): Implement Backend according to the requirements.
 #Upload usage 
@@ -147,6 +148,25 @@ class Backend:
     def get_image(self,imagename):
         img = "https://storage.cloud.google.com/project1_wiki_content/Authors/" + imagename
         return img
+    """Gets search results, takes a query and returns matching"""
+    def get_search_results(self, query):
+        blobs = self.storage_client.list_blobs(self.pages_bucket_name)
+        possible_results = defaultdict(int)
+        files = []
+        query = query.lower()
+        PREFFIX_REMOVE = 6
+        SUFFIX_REMOVE = -4
+        for blob in blobs:
+            if blob.name.startswith("P"):
+                file_name = blob.name[6:-4].lower()
+                for i in range(len(file_name)):
+                    if i < len(query) and query[i] == file_name[i]:
+                        possible_results[file_name] += 1
+                if possible_results[file_name] > (len(query) // 2):
+                    files.append(blob.name[PREFFIX_REMOVE:SUFFIX_REMOVE])
+
+        return files
+        
     def get_uploaded(self):
         PREFFIX_REMOVE = 9
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)
