@@ -59,6 +59,7 @@ def make_endpoints(app):
     """Goes to upload page, receives an input file and then calls the upload method with said input file"""
     @app.route("/upload" , methods = ['GET',"POST"])
     def upload():
+        content = back.get_uploaded()
         if request.method == "POST":
             file = request.form.get("file")
             back.upload(file)
@@ -66,3 +67,12 @@ def make_endpoints(app):
             if request.form.get("actionbutton"):
                 back.delete_user_img()   
         return render_template("upload.html",username=back.getUserName())    
+
+        return render_template("upload.html", content=content)
+
+    @app.route("/search", methods = ['GET', 'POST'])    
+    def search():
+        if request.method == "POST":
+            query = request.form.get("query")
+            files = back.get_search_results(query)
+        return render_template("results.html", content=files, page_name = query)
