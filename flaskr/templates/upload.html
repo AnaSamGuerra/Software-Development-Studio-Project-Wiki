@@ -11,4 +11,10 @@ Upload
   <input type="file" name="file">
   <input type=submit value=Upload>
 </form>
+<div>
+    <h2>Users Gallery</h2>
+    {% for image in content %}
+        <img src={{image}} width="400px" height="300px"></img>
+    {% endfor %}
+</div>
 {% endblock %}
