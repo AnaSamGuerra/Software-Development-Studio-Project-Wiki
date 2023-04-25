@@ -139,7 +139,6 @@ class Backend:
         img = "https://storage.cloud.google.com/project1_wiki_content/Uploaded/" + imagename
         return img
 
-
     """Gets search results, takes a query and returns matching"""
     def get_search_results(self, query):
         blobs = self.storage_client.list_blobs(self.pages_bucket_name)

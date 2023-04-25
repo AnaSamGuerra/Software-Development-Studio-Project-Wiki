@@ -65,10 +65,8 @@ def make_endpoints(app):
             back.upload(file)
             #If 
             if request.form.get("actionbutton"):
-                back.delete_user_img()   
-        return render_template("upload.html",username=back.getUserName())    
-
-        return render_template("upload.html", content=content)
+                back.delete_user_img()    
+        return render_template("upload.html", content=content,username=back.getUserName())
 
     @app.route("/search", methods = ['GET', 'POST'])    
     def search():
