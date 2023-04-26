@@ -1,0 +1,40 @@
+body {
+    background-color: black;
+    color: white;
+    font-size: 17px;
+}
+
+a {
+    color: yellow;
+}
+
+
+.navbar {
+    background-color: black; /* Set the background color */
+    overflow: hidden; /* Hide overflow content */
+  }
+  
+  /* Links inside the navigation bar */
+  .navbar a {
+    float: left; /* Make links float left */
+    color: white; /* Set link color */
+    text-align: center; /* Center the text */
+    padding: 14px 16px; /* Set padding for links */
+    text-decoration: none; /* Remove underline */
+    font-size: 17px; /* Set font size */
+  }
+  
+  /* Change the color of links on hover */
+  .navbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .searchbar {
+    margin: 10px;
+    height: 20px;
+  }
+
+  .content {
+padding: 14px 14px;    
+  }
